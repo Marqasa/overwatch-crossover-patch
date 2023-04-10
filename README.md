@@ -1,5 +1,5 @@
 # Overwatch CrossOver Patch
-Patch for Overwatch 2 on Apple Silicon macs
+Overwatch 2 patch for CrossOver on Apple Silicon Macs
 
 ## Disclaimer
 This script is provided "as is" without any warranty of any kind, either express or implied, including but not limited to the warranties of merchantability, fitness for a particular purpose, and non-infringement. In no event shall the author be liable for any damages, including any direct, indirect, special, incidental, or consequential damages of any kind arising out of or in connection with the use or performance of this script.
