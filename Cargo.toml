@@ -1,0 +1,13 @@
+[package]
+name = "overwatch-crossover-patch"
+version = "0.1.0"
+edition = "2021"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+directories = "5.0.0"
+downloader = "0.2.7"
+flate2 = "1.0.25"
+tar = "0.4.38"
+xz = "0.1.0"
