@@ -168,24 +168,8 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
     // Remove the dependencies folder
     fs::remove_dir_all(dependencies_path)?;
 
-    // Let the user know that the bottle config is being updated
-    println!("Updating bottle config...");
-
-    // Update bottle config
-    let bottle_config_path = bottle_path.join("cxbottle.conf");
-    let mut bottle_config = OpenOptions::new()
-        .write(true)
-        .append(true)
-        .open(bottle_config_path)
-        .unwrap();
-
-    // Add the environment variables
-    if let Err(e) = writeln!(bottle_config, "\"MVK_ALLOW_METAL_FENCES\" = \"1\"") {
-        eprintln!("Couldn't write to file: {}", e);
-    }
-    if let Err(e) = writeln!(bottle_config, "\"WINEESYNC\" = \"1\"") {
-        eprintln!("Couldn't write to file: {}", e);
-    }
+    // Update the bottle config
+    update_bottle_config(bottle_path);
 
     // Let the user know that the dxvk config is being created
     println!("Creating dxvk config...");
@@ -207,4 +191,49 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
     println!("Installation complete!");
 
     Ok(())
+}
+
+/// Updates the bottle config
+fn update_bottle_config(bottle_path: &Path) {
+    // Let the user know that the bottle config is being updated
+    println!("Updating bottle config...");
+
+    // Get the bottle config path
+    let bottle_config_path = bottle_path.join("cxbottle.conf");
+
+    // Check if the bottle config exists
+    if !bottle_config_path.exists() {
+        // Warn the user that the bottle config couldn't be found
+        println!("Couldn't find bottle config. Please check your CrossOver installation.");
+
+        return;
+    }
+
+    // Get the bottle config text
+    let bottle_config_text = fs::read_to_string(&bottle_config_path).expect("Unable to read file");
+
+    // Create a vector of environment variables
+    let environment_variables = [
+        "\"MVK_ALLOW_METAL_FENCES\" = \"1\"",
+        "\"WINEESYNC\" = \"1\"",
+    ];
+
+    // Open the bottle config
+    let mut bottle_config = OpenOptions::new()
+        .write(true)
+        .append(true)
+        .open(bottle_config_path)
+        .expect("Unable to open file");
+
+    // Loop through the environment variables
+    for environment_variable in environment_variables.iter() {
+        // Check if the environment variable is already in the bottle config
+        if !bottle_config_text.contains(environment_variable) {
+            // Write the environment variable to the bottle config
+            if let Err(e) = writeln!(bottle_config, "{}", environment_variable) {
+                // Warn the user that the environment variable couldn't be written to the bottle config
+                println!("Couldn't write to bottle config: {}", e);
+            }
+        }
+    }
 }
