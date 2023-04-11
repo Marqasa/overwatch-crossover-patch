@@ -23,3 +23,31 @@ with the use or performance of this script.
 7. Ctrl + Click the patch file and select "Open" from the menu
 8. Click "Open" in the dialog that appears
 9. When prompted, enter the name of your Overwatch bottle
+
+## DXVK Cache
+
+When the game first launches, you will see a message in the bottom left corner
+while DXVK loads. The game will run slowly until this message disappears. I
+recommend waiting on the login screen and then go to the practice range to test
+performance.
+
+## Menu Navigation
+
+To help with menu navigation I have uploaded a gallery showing how the UI should
+look here: https://imgur.com/a/exzsCBi
+
+There is also a good video here for editing settings. Make the game and video
+full screen then tab between them: https://www.youtube.com/watch?v=tgS_OGABrGY
+
+## Mouse Acceleration
+
+To disable mouse acceleration on macOS, I recommend Linear Mouse:
+https://linearmouse.app/
+
+## Known Issues
+
+Menus have a lot of invisible elements. It is currently very difficult to change
+settings/navigate the menus (you have to know where everything is positioned)
+
+The mouse sometimes becomes unlocked, requiring you to tab out, then back in to
+fix it.
