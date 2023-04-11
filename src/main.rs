@@ -160,7 +160,13 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
     let documents_path = user_dirs
         .document_dir()
         .expect("No documents directory found");
-    let settings_path = documents_path.join("Overwatch/Settings/Settings_v0.ini");
+    let settings_folder_path = documents_path.join("Overwatch/Settings");
+
+    // Create the settings folder
+    fs::create_dir_all(&settings_folder_path)?;
+
+    // Create the settings file path
+    let settings_path = settings_folder_path.join("Settings_v0.ini");
 
     // Copy the settings file
     fs::copy(dependencies_path.join("Settings_v0.ini"), settings_path)?;
