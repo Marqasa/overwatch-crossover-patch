@@ -39,6 +39,17 @@ look here: https://imgur.com/a/exzsCBi
 There is also a good video here for editing settings. Make the game and video
 full screen then tab between them: https://www.youtube.com/watch?v=tgS_OGABrGY
 
+## Settings
+
+The settings file is located here:
+~/Documents/Overwatch/Settings/Settings_v0.ini
+
+The provided template uses 50% render scale for maximum performance. If you
+would like higher resolution at the cost of FPS, increase MaxWorldScale.
+
+There is also a WIP list of available settings and their values here:
+https://drive.google.com/file/d/11Wemn2zuiE93t93aGRGuKuF-3GD-DOgw/view?usp=sharing
+
 ## Mouse Acceleration
 
 To disable mouse acceleration on macOS, I recommend Linear Mouse:
