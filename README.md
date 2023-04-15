@@ -26,6 +26,8 @@ with the use or performance of this script.
 7. Ctrl + Click the patch file and select "Open" from the menu
 8. Click "Open" in the dialog that appears
 9. When prompted, enter the name of your Overwatch bottle
+10. In CrossOver, right click your Overwatch bottle, go to Settings, and enable
+    `DXVK Backend for D3D11`
 
 ## DXVK Cache
 
