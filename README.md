@@ -36,6 +36,14 @@ while DXVK loads. The game will run slowly until this message disappears. I
 recommend waiting on the login screen and then go to the practice range to test
 performance.
 
+## Settings
+
+I have made a simple application for editing game settings. It is available
+here: https://github.com/Marqasa/overwatch-settings
+
+You can also modify the settings file manually here:
+~/Documents/Overwatch/Settings/Settings_v0.ini
+
 ## Menu Navigation
 
 To help with menu navigation I have uploaded a gallery showing how the UI should
@@ -43,17 +51,6 @@ look here: https://imgur.com/a/exzsCBi
 
 There is also a good video here for editing settings. Make the game and video
 full screen then tab between them: https://www.youtube.com/watch?v=tgS_OGABrGY
-
-## Settings
-
-The settings file is located here:
-~/Documents/Overwatch/Settings/Settings_v0.ini
-
-The provided template uses 50% render scale for maximum performance. If you
-would like higher resolution at the cost of FPS, increase MaxWorldScale.
-
-There is also a WIP list of available settings and their values here:
-https://drive.google.com/file/d/11Wemn2zuiE93t93aGRGuKuF-3GD-DOgw/view?usp=sharing
 
 ## Mouse Acceleration
 
