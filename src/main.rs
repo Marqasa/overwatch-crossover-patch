@@ -6,6 +6,7 @@ use std::fs::File;
 use std::fs::OpenOptions;
 use std::io::prelude::*;
 use std::path::Path;
+use std::path::PathBuf;
 use tar::Archive;
 use xz::read::XzDecoder;
 
@@ -18,27 +19,41 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
         return Ok(());
     }
 
-    // Get bottle name from user
-    let mut bottle_name = String::new();
+    // Get bottle name or path from user
+    let mut bottle_location = String::new();
 
-    println!("Enter the name of your Overwatch bottle:");
+    println!("Enter your Overwatch bottle name (or path with --path /path/to/bottle):");
 
     std::io::stdin()
-        .read_line(&mut bottle_name)
+        .read_line(&mut bottle_location)
         .expect("Failed to read line");
 
-    // Trim the bottle name
-    bottle_name = bottle_name.trim().to_string();
+    // Trim the bottle location
+    bottle_location = bottle_location.trim().to_string();
 
-    // Get the bottle folder
-    let binding = BaseDirs::new()
-        .expect("No base directories found")
-        .home_dir()
-        .join(format!(
-            "Library/Application Support/CrossOver/Bottles/{}",
-            bottle_name
-        ));
-    let bottle_path = binding.as_path();
+    // Declare the bottle path buffer
+    let bottle_path_buf: PathBuf;
+
+    // Check if the bottle is a path
+    if bottle_location.starts_with("--path") {
+        // Split the bottle location
+        let mut parts = bottle_location.splitn(2, ' ');
+
+        // Get the path
+        bottle_path_buf = PathBuf::from(parts.nth(1).expect("No path found"));
+    } else {
+        // Get the path from the bottle name
+        bottle_path_buf = BaseDirs::new()
+            .expect("No base directories found")
+            .home_dir()
+            .join(format!(
+                "Library/Application Support/CrossOver/Bottles/{}",
+                bottle_location
+            ));
+    }
+
+    // Convert PathBuf to Path
+    let bottle_path = bottle_path_buf.as_path();
 
     // Check if the bottle exists
     if !bottle_path.exists() {
