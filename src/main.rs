@@ -40,7 +40,13 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
         let mut parts = bottle_location.splitn(2, ' ');
 
         // Get the path
-        bottle_path_buf = PathBuf::from(parts.nth(1).expect("No path found"));
+        bottle_path_buf = PathBuf::from(
+            parts
+                .nth(1)
+                .expect("No path found")
+                .trim()
+                .replace("\\", ""),
+        );
     } else {
         // Get the path from the bottle name
         bottle_path_buf = BaseDirs::new()
