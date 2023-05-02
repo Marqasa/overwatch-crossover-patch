@@ -63,4 +63,7 @@ Menus have a lot of invisible elements. It is currently very difficult to change
 settings/navigate the menus (you have to know where everything is positioned)
 
 The mouse sometimes becomes unlocked, requiring you to tab out, then back in to
-fix it.
+fix it. The best way I have found to deal with this is to use borderless
+windowed mode,
+[reduce motion](https://support.apple.com/en-gb/guide/mac-help/mchlc03f57a1/mac)
+in macOS, and cmd + tab twice quickly to re-lock the mouse.
