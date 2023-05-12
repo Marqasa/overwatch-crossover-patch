@@ -15,7 +15,7 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
     let crossover_path = Path::new("/Applications/CrossOver.app/Contents/SharedSupport/CrossOver");
 
     if !crossover_path.exists() {
-        println!("CrossOver not found");
+        eprintln!("CrossOver not found");
         return Ok(());
     }
 
@@ -63,7 +63,7 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
 
     // Check if the bottle exists
     if !bottle_path.exists() {
-        println!("Bottle not found");
+        eprintln!("Bottle not found");
         return Ok(());
     }
 
@@ -82,7 +82,13 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
 
     // Create the directory if it doesn't exist
     if !dependencies_path.exists() {
-        fs::create_dir(dependencies_path)?;
+        fs::create_dir(dependencies_path).map_err(|e| {
+            eprintln!(
+                "Failed to create directory: {}",
+                dependencies_path.display()
+            );
+            return e;
+        })?;
     }
 
     // Set the dependency file names and URLs
@@ -125,21 +131,38 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
     downloads.push(settings);
 
     // Download the files
-    downloader.download(&downloads)?;
+    downloader.download(&downloads).map_err(|e| {
+        eprintln!("Failed to download files");
+        return e;
+    })?;
 
     // Let the user know that the dependencies are being installed
     println!("Installing dependencies...");
 
     // Extract the files
-    let tar_xz = File::open(dependencies_path.join(moltenvk_file))?;
+    let moltenvk_path = dependencies_path.join(moltenvk_file);
+    let tar_xz = File::open(&moltenvk_path).map_err(|e| {
+        eprintln!("Failed to open file: {}", moltenvk_path.display());
+        return e;
+    })?;
     let decompressor = XzDecoder::new(tar_xz);
     let mut archive = Archive::new(decompressor);
-    archive.unpack(dependencies_path)?;
+    archive.unpack(dependencies_path).map_err(|e| {
+        eprintln!("Failed to extract file: {}", moltenvk_path.display());
+        return e;
+    })?;
 
-    let tar_gz = File::open(dependencies_path.join(dxvk_file))?;
+    let dxvk_path = dependencies_path.join(dxvk_file);
+    let tar_gz = File::open(&dxvk_path).map_err(|e| {
+        eprintln!("Failed to open file: {}", dxvk_path.display());
+        return e;
+    })?;
     let tar = GzDecoder::new(tar_gz);
     let mut archive = Archive::new(tar);
-    archive.unpack(dependencies_path)?;
+    archive.unpack(dependencies_path).map_err(|e| {
+        eprintln!("Failed to extract file: {}", dxvk_path.display());
+        return e;
+    })?;
 
     // Copy the files to the correct location
     let dxvk_x32_path = dependencies_path.join("dxvk-macOS-async-v1.10.3-20230402-CrossOver/x32");
@@ -149,33 +172,66 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
     let bottle_x64_path = bottle_path.join("drive_c/windows/system32");
 
     // Copy the files from the dxvk x32 folder to the crossover x32 folder
-    for entry in fs::read_dir(dxvk_x32_path)? {
-        let entry = entry?;
+    for entry in fs::read_dir(&dxvk_x32_path).map_err(|e| {
+        eprintln!("Failed to read directory: {}", dxvk_x32_path.display());
+        return e;
+    })? {
+        let entry = entry.map_err(|e| {
+            eprintln!("Failed to read directory: {}", dxvk_x32_path.display());
+            return e;
+        })?;
         let path = entry.path();
         let file_name = path.file_name().expect("No file name found");
-        fs::copy(&path, dxvk_x32_crossover_path.join(file_name))?;
+        let file_path = dxvk_x32_crossover_path.join(file_name);
+        fs::copy(&path, &file_path).map_err(|e| {
+            eprintln!("Failed to copy file: {}", file_path.display());
+            return e;
+        })?;
     }
 
     // Copy the files from the dxvk x64 folder to the crossover x64 folder and the bottle x64 folder
-    for entry in fs::read_dir(dxvk_x64_path)? {
-        let entry = entry?;
+    for entry in fs::read_dir(&dxvk_x64_path).map_err(|e| {
+        eprintln!("Failed to read directory: {}", dxvk_x64_path.display());
+        return e;
+    })? {
+        let entry = entry.map_err(|e| {
+            eprintln!("Failed to read directory: {}", dxvk_x64_path.display());
+            return e;
+        })?;
         let path = entry.path();
         let file_name = path.file_name().expect("No file name found");
-        fs::copy(&path, dxvk_x64_crossover_path.join(file_name))?;
-        fs::copy(&path, bottle_x64_path.join(file_name))?;
+        let file_path = dxvk_x64_crossover_path.join(file_name);
+        fs::copy(&path, &file_path).map_err(|e| {
+            eprintln!("Failed to copy file: {}", file_path.display());
+            return e;
+        })?;
+        let file_path = bottle_x64_path.join(file_name);
+        fs::copy(&path, &file_path).map_err(|e| {
+            eprintln!("Failed to copy file: {}", file_path.display());
+            return e;
+        })?;
     }
 
     // Copy the moltenvk dylib file to the crossover folder
     let moltenvk_path =
         dependencies_path.join("Package/Release/MoltenVK/dylib/macOS/libMoltenVK.dylib");
     let moltenvk_crossover_path = crossover_path.join("lib64/libMoltenVK.dylib");
-    fs::copy(moltenvk_path, moltenvk_crossover_path)?;
+    fs::copy(moltenvk_path, &moltenvk_crossover_path).map_err(|e| {
+        eprintln!("Failed to copy file: {}", moltenvk_crossover_path.display());
+        return e;
+    })?;
 
     // Copy the dxvk cache file to the bottle folder
+    let dxvk_cache_path =
+        bottle_path.join("drive_c/Program Files (x86)/Overwatch/_retail_/Overwatch.dxvk-cache");
     fs::copy(
         dependencies_path.join("Overwatch.dxvk-cache"),
-        bottle_path.join("drive_c/Program Files (x86)/Overwatch/_retail_/Overwatch.dxvk-cache"),
-    )?;
+        &dxvk_cache_path,
+    )
+    .map_err(|e| {
+        eprintln!("Failed to copy file: {}", dxvk_cache_path.display());
+        return e;
+    })?;
 
     // Copy the settings file to the documents folder
     let documents_path = user_dirs
@@ -184,16 +240,31 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
     let settings_folder_path = documents_path.join("Overwatch/Settings");
 
     // Create the settings folder
-    fs::create_dir_all(&settings_folder_path)?;
+    fs::create_dir_all(&settings_folder_path).map_err(|e| {
+        eprintln!(
+            "Failed to create directory: {}",
+            settings_folder_path.display()
+        );
+        return e;
+    })?;
 
     // Create the settings file path
     let settings_path = settings_folder_path.join("Settings_v0.ini");
 
     // Copy the settings file
-    fs::copy(dependencies_path.join("Settings_v0.ini"), settings_path)?;
+    fs::copy(dependencies_path.join("Settings_v0.ini"), &settings_path).map_err(|e| {
+        eprintln!("Failed to copy file: {}", settings_path.display());
+        return e;
+    })?;
 
     // Remove the dependencies folder
-    fs::remove_dir_all(dependencies_path)?;
+    fs::remove_dir_all(dependencies_path).map_err(|e| {
+        eprintln!(
+            "Failed to remove directory: {}",
+            dependencies_path.display()
+        );
+        return e;
+    })?;
 
     // Update the bottle config
     update_bottle_config(bottle_path);
@@ -207,8 +278,11 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
     let mut dxvk_conf = OpenOptions::new()
         .write(true)
         .create(true)
-        .open(dxvk_conf_path)
-        .unwrap();
+        .open(&dxvk_conf_path)
+        .map_err(|e| {
+            eprintln!("Failed to create file: {}", dxvk_conf_path.display());
+            return e;
+        })?;
 
     if let Err(e) = writeln!(dxvk_conf, "dxvk.hud = compiler") {
         eprintln!("Couldn't write to file: {}", e);
@@ -231,7 +305,7 @@ fn update_bottle_config(bottle_path: &Path) {
     // Check if the bottle config exists
     if !bottle_config_path.exists() {
         // Warn the user that the bottle config couldn't be found
-        println!("Couldn't find bottle config. Please check your CrossOver installation.");
+        eprintln!("Couldn't find bottle config. Please check your CrossOver installation.");
 
         return;
     }
@@ -259,7 +333,7 @@ fn update_bottle_config(bottle_path: &Path) {
             // Write the environment variable to the bottle config
             if let Err(e) = writeln!(bottle_config, "{}", environment_variable) {
                 // Warn the user that the environment variable couldn't be written to the bottle config
-                println!("Couldn't write to bottle config: {}", e);
+                eprintln!("Couldn't write to bottle config: {}", e);
             }
         }
     }
