@@ -2,8 +2,8 @@
 
 This patch enables Overwatch 2 to run on Apple silicon Macs (M1 & M2). It uses
 the latest versions of
-[MoltenVK](https://github.com/The-Wineskin-Project/MoltenVK/releases 'MoltenVK')
-and [DXVK](https://github.com/Gcenx/DXVK-macOS/releases 'DXVK') for macOS.
+[MoltenVK](https://github.com/KhronosGroup/MoltenVK 'MoltenVK') and
+[DXVK](https://github.com/Gcenx/DXVK-macOS 'DXVK') for macOS.
 
 ## Disclaimer
 
