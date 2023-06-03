@@ -8,7 +8,6 @@ use std::io::prelude::*;
 use std::path::Path;
 use std::path::PathBuf;
 use tar::Archive;
-use xz::read::XzDecoder;
 
 fn main() -> Result<(), Box<dyn std::error::Error>> {
     // Check if CrossOver is installed
@@ -92,9 +91,9 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
     }
 
     // Set the dependency file names and URLs
-    let moltenvk_file = "macos-1.2.3.tar.xz";
+    let moltenvk_file = "MoltenVK-macos.tar";
     let moltenvk_url = format!(
-        "https://github.com/The-Wineskin-Project/MoltenVK/releases/download/v1.2.3/{}",
+        "https://github.com/KhronosGroup/MoltenVK/releases/download/v1.2.4/{}",
         moltenvk_file
     );
     let dxvk_file = "dxvk-macOS-async-v1.10.3-20230402-CrossOver.tar.gz";
@@ -141,12 +140,11 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
 
     // Extract the files
     let moltenvk_path = dependencies_path.join(moltenvk_file);
-    let tar_xz = File::open(&moltenvk_path).map_err(|e| {
+    let moltenvk_tar = File::open(&moltenvk_path).map_err(|e| {
         eprintln!("Failed to open file: {}", moltenvk_path.display());
         return e;
     })?;
-    let decompressor = XzDecoder::new(tar_xz);
-    let mut archive = Archive::new(decompressor);
+    let mut archive = Archive::new(moltenvk_tar);
     archive.unpack(dependencies_path).map_err(|e| {
         eprintln!("Failed to extract file: {}", moltenvk_path.display());
         return e;
@@ -213,8 +211,7 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
     }
 
     // Copy the moltenvk dylib file to the crossover folder
-    let moltenvk_path =
-        dependencies_path.join("Package/Release/MoltenVK/dylib/macOS/libMoltenVK.dylib");
+    let moltenvk_path = dependencies_path.join("MoltenVK/MoltenVK/dylib/macOS/libMoltenVK.dylib");
     let moltenvk_crossover_path = crossover_path.join("lib64/libMoltenVK.dylib");
     fs::copy(moltenvk_path, &moltenvk_crossover_path).map_err(|e| {
         eprintln!("Failed to copy file: {}", moltenvk_crossover_path.display());
