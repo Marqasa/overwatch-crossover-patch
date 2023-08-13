@@ -6,6 +6,7 @@ edition = "2021"
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
+dialoguer = "0.10.4"
 directories = "5.0.0"
 downloader = "0.2.7"
 flate2 = "1.0.25"

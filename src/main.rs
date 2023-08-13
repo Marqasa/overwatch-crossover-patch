@@ -1,3 +1,4 @@
+use dialoguer::{console::Term, theme::ColorfulTheme, Select};
 use directories::{BaseDirs, UserDirs};
 use downloader::{downloader::Builder, Download};
 use flate2::read::GzDecoder;
@@ -8,6 +9,11 @@ use std::io::prelude::*;
 use std::path::Path;
 use std::path::PathBuf;
 use tar::Archive;
+
+enum Client {
+    BattleNet,
+    Steam,
+}
 
 fn main() -> Result<(), Box<dyn std::error::Error>> {
     // Check if CrossOver is installed
@@ -63,6 +69,36 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
     // Check if the bottle exists
     if !bottle_path.exists() {
         eprintln!("Bottle not found");
+        return Ok(());
+    }
+
+    // Prompt the user to select a game client
+    let items = vec!["Battle.net", "Steam"];
+    let selection = Select::with_theme(&ColorfulTheme::default())
+        .with_prompt("Please select your game client:")
+        .items(&items)
+        .default(0)
+        .interact_on_opt(&Term::stderr())?;
+    let client = match selection {
+        Some(0) => Client::BattleNet,
+        Some(1) => Client::Steam,
+        _ => {
+            eprintln!("No client selected");
+            return Ok(());
+        }
+    };
+
+    // Check installation exists
+    let game_file = "Overwatch.exe";
+    let installation_path = match client {
+        Client::BattleNet => bottle_path.join("drive_c/Program Files (x86)/Overwatch/_retail_"),
+        Client::Steam => {
+            bottle_path.join("drive_c/Program Files (x86)/Steam/steamapps/common/Overwatch")
+        }
+    };
+
+    if !installation_path.join(&game_file).exists() {
+        eprintln!("Overwatch installation not found");
         return Ok(());
     }
 
@@ -218,17 +254,39 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
         return e;
     })?;
 
+    // Let the user know that the dxvk cache is being copied
+    println!("Copying DXVK cache...");
+
     // Copy the dxvk cache file to the bottle folder
-    let dxvk_cache_path =
-        bottle_path.join("drive_c/Program Files (x86)/Overwatch/_retail_/Overwatch.dxvk-cache");
-    fs::copy(
-        dependencies_path.join("Overwatch.dxvk-cache"),
-        &dxvk_cache_path,
-    )
-    .map_err(|e| {
-        eprintln!("Failed to copy file: {}", dxvk_cache_path.display());
+    let dxvk_cache_folder = match client {
+        Client::BattleNet => bottle_path.join("drive_c/Program Files (x86)/Overwatch/_retail_"),
+        Client::Steam => bottle_path.join(
+            "drive_c/Program Files (x86)/Steam/steamapps/shadercache/2357570/DXVK_state_cache",
+        ),
+    };
+
+    fs::create_dir_all(&dxvk_cache_folder).map_err(|e| {
+        eprintln!(
+            "Failed to create directory: {}",
+            dxvk_cache_folder.display()
+        );
         return e;
     })?;
+
+    fs::copy(
+        dependencies_path.join(&dxvk_cache_file),
+        dxvk_cache_folder.join(&dxvk_cache_file),
+    )
+    .map_err(|e| {
+        eprintln!(
+            "Failed to copy file: {}",
+            dxvk_cache_folder.join(&dxvk_cache_file).display()
+        );
+        return e;
+    })?;
+
+    // Let the user know that the settings file is being copied
+    println!("Copying settings file...");
 
     // Copy the settings file to the documents folder
     let documents_path = user_dirs
@@ -270,14 +328,13 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
     println!("Creating dxvk config...");
 
     // Creat dxvk.conf file
-    let dxvk_conf_path =
-        bottle_path.join("drive_c/Program Files (x86)/Overwatch/_retail_/dxvk.conf");
+    let dxvk_conf_file = installation_path.join("dxvk.conf");
     let mut dxvk_conf = OpenOptions::new()
         .write(true)
         .create(true)
-        .open(&dxvk_conf_path)
+        .open(&dxvk_conf_file)
         .map_err(|e| {
-            eprintln!("Failed to create file: {}", dxvk_conf_path.display());
+            eprintln!("Failed to create file: {}", dxvk_conf_file.display());
             return e;
         })?;
 
