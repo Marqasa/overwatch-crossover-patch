@@ -17,7 +17,8 @@ with the use or performance of this script.
 ## How to use
 
 1. Install **CrossOver** from https://www.codeweavers.com/crossover
-2. In CrossOver, click **+ Install** and search for **Battle.net Desktop App**
+2. In CrossOver, click **+ Install** and search for either **Battle.net Desktop
+   App** or **Steam**
 3. Install **Overwatch**
 4. Download the latest patch from the releases page
 5. Open the terminal and navigate to the directory where you downloaded the
@@ -25,7 +26,7 @@ with the use or performance of this script.
 6. Run the following command: `chmod +x ./overwatch-crossover-patch`
 7. Ctrl + Click the patch file and select "Open" from the menu
 8. Click "Open" in the dialog that appears
-9. When prompted, enter the name of your Overwatch bottle
+9. When prompted, enter the name of your Overwatch bottle and game client
 10. In CrossOver, right click your Overwatch bottle, go to Settings, and enable
     `DXVK Backend for D3D11`
 
@@ -54,13 +55,14 @@ full screen then tab between them: https://www.youtube.com/watch?v=tgS_OGABrGY
 
 ## Mouse Acceleration
 
-To disable mouse acceleration on macOS, I recommend Linear Mouse:
-https://linearmouse.app/
+You can disable mouse acceleration on macOS Sonoma by going to System Settings >
+Mouse > Advanced and checking disable pointer acceleration. On older versions of
+macOS, I recommend Linear Mouse: https://linearmouse.app/
 
 ## Known Issues
 
-Menus have a lot of invisible elements. It is currently very difficult to change
-settings/navigate the menus (you have to know where everything is positioned)
+On versions of macOS prior to Sonoma, the game has many missing UI elements
+making navigation difficult. This issue is completely resolved in macOS Sonoma.
 
 The mouse sometimes becomes unlocked, requiring you to tab out, then back in to
 fix it. The best way I have found to deal with this is to use borderless
