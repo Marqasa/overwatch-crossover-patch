@@ -59,6 +59,12 @@ You can disable mouse acceleration on macOS Sonoma by going to System Settings >
 Mouse > Advanced and checking disable pointer acceleration. On older versions of
 macOS, I recommend Linear Mouse: https://linearmouse.app/
 
+## Troubleshooting
+
+If you get an "Operation not permitted" error, you may need to give Terminal
+Full Disk Access. You can do this by going to System Settings > Privacy &
+Security > Full Disk Access and adding Terminal to the list.
+
 ## Known Issues
 
 On versions of macOS prior to Sonoma, the game has many missing UI elements
