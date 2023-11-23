@@ -16,12 +16,36 @@ enum Client {
 }
 
 fn main() -> Result<(), Box<dyn std::error::Error>> {
-    // Check if CrossOver is installed
-    let crossover_path = Path::new("/Applications/CrossOver.app/Contents/SharedSupport/CrossOver");
+    // Path to the CrossOver folder inside the CrossOver.app bundle
+    let inner_crossover_path = "Contents/SharedSupport/CrossOver";
 
+    // Full path to the CrossOver folder
+    let crossover_path = Path::new("/Applications/CrossOver.app").join(inner_crossover_path);
+
+    // Check if the crossover path exists
     if !crossover_path.exists() {
-        eprintln!("CrossOver not found");
-        return Ok(());
+        // Prompt the user to enter the crossover location
+        println!("CrossOver not found. If you have it installed in a custom location, please enter the path here (e.g. /Applications/CrossOver.app):");
+
+        // Declare the crossover location
+        let mut crossover_location = String::new();
+
+        // Get the crossover location from the user
+        std::io::stdin()
+            .read_line(&mut crossover_location)
+            .expect("Failed to read line");
+
+        // Trim the crossover location
+        crossover_location = crossover_location.trim().to_string();
+
+        // Create the crossover path
+        let crossover_path = Path::new(&crossover_location).join(inner_crossover_path);
+
+        // Check if the crossover path exists
+        if !crossover_path.exists() {
+            eprintln!("CrossOver not found");
+            return Ok(());
+        }
     }
 
     // Get bottle name or path from user
