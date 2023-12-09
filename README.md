@@ -1,6 +1,6 @@
 # Overwatch 2 CrossOver Patch
 
-This patch enables Overwatch 2 to run on Apple silicon Macs (M1 & M2). It uses
+This patch enables Overwatch 2 to run on Apple Silicon Macs. It uses
 the latest versions of
 [MoltenVK](https://github.com/KhronosGroup/MoltenVK 'MoltenVK') and
 [DXVK](https://github.com/Gcenx/DXVK-macOS 'DXVK') for macOS.
