@@ -389,30 +389,48 @@ fn update_bottle_config(bottle_path: &Path) {
     }
 
     // Get the bottle config text
-    let bottle_config_text = fs::read_to_string(&bottle_config_path).expect("Unable to read file");
+    let mut bottle_config_text =
+        fs::read_to_string(&bottle_config_path).expect("Unable to read file");
 
-    // Create a vector of environment variables
-    let environment_variables = [
-        "\"MVK_ALLOW_METAL_FENCES\" = \"1\"",
+    // Create a vector of environment variables to find and replace
+    let find = [
+        "\"MVK_ALLOW_METAL_FENCES\" = \"0\"",
+        "\"WINED3DMETAL\" = \"1\"",
+        "\"WINEMSYNC\" = \"0\"",
         "\"WINEESYNC\" = \"1\"",
     ];
 
-    // Open the bottle config
+    let replace = [
+        "\"MVK_ALLOW_METAL_FENCES\" = \"1\"",
+        "\"WINED3DMETAL\" = \"0\"",
+        "\"WINEMSYNC\" = \"1\"",
+        "\"WINEESYNC\" = \"0\"",
+    ];
+
+    // Iterate over the environment variables to find and replace
+    for (i, find) in find.iter().enumerate() {
+        // Check if the bottle config text contains the current environment variable
+        if bottle_config_text.contains(find) {
+            // Replace the environment variable with the corresponding replacement
+            bottle_config_text = bottle_config_text.replace(find, replace[i]);
+        } else if !bottle_config_text.contains(replace[i]) {
+            // If the replacement is not found, append it to the end of the bottle config text
+            bottle_config_text = format!(
+                "{}\n{}\n",
+                bottle_config_text.trim(),
+                replace[i].to_string()
+            );
+        }
+    }
+
+    // Write the bottle config text to the bottle config file
     let mut bottle_config = OpenOptions::new()
         .write(true)
-        .append(true)
+        .truncate(true)
         .open(bottle_config_path)
         .expect("Unable to open file");
 
-    // Loop through the environment variables
-    for environment_variable in environment_variables.iter() {
-        // Check if the environment variable is already in the bottle config
-        if !bottle_config_text.contains(environment_variable) {
-            // Write the environment variable to the bottle config
-            if let Err(e) = writeln!(bottle_config, "{}", environment_variable) {
-                // Warn the user that the environment variable couldn't be written to the bottle config
-                eprintln!("Couldn't write to bottle config: {}", e);
-            }
-        }
-    }
+    bottle_config
+        .write(bottle_config_text.as_bytes())
+        .expect("Unable to write file");
 }
