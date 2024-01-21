@@ -1,8 +1,7 @@
 # Overwatch 2 CrossOver Patch
 
-This patch enables Overwatch 2 to run on Apple Silicon Macs. It uses
-the latest versions of
-[MoltenVK](https://github.com/KhronosGroup/MoltenVK 'MoltenVK') and
+This patch enables Overwatch 2 to run on Apple Silicon macs. It uses the latest
+versions of [MoltenVK](https://github.com/KhronosGroup/MoltenVK 'MoltenVK') and
 [DXVK](https://github.com/Gcenx/DXVK-macOS 'DXVK') for macOS.
 
 ## Disclaimer
@@ -20,7 +19,9 @@ with the use or performance of this script.
 2. In CrossOver, click **+ Install** and search for either **Battle.net Desktop
    App** or **Steam**
 3. Install **Overwatch**
-4. Download the latest patch from the releases page
+4. Download the latest patch from the
+   [releases](https://github.com/Marqasa/overwatch-crossover-patch/releases)
+   page
 5. Open the terminal and navigate to the directory where you downloaded the
    patch (e.g. `cd ~/Downloads`)
 6. Run the following command: `chmod +x ./overwatch-crossover-patch`
@@ -37,22 +38,6 @@ while DXVK loads. The game will run slowly until this message disappears. I
 recommend waiting on the login screen and then go to the practice range to test
 performance.
 
-## Settings
-
-I have made a simple application for editing game settings. It is available
-here: https://github.com/Marqasa/overwatch-settings
-
-You can also modify the settings file manually here:
-~/Documents/Overwatch/Settings/Settings_v0.ini
-
-## Menu Navigation
-
-To help with menu navigation I have uploaded a gallery showing how the UI should
-look here: https://imgur.com/a/exzsCBi
-
-There is also a good video here for editing settings. Make the game and video
-full screen then tab between them: https://www.youtube.com/watch?v=tgS_OGABrGY
-
 ## Mouse Acceleration
 
 You can disable mouse acceleration on macOS Sonoma by going to System Settings >
@@ -67,11 +52,22 @@ Security > Full Disk Access and adding Terminal to the list.
 
 ## Known Issues
 
-On versions of macOS prior to Sonoma, the game has many missing UI elements
-making navigation difficult. This issue is completely resolved in macOS Sonoma.
+- The mouse sometimes becomes unlocked, requiring you to tab out, then back in
+  to fix it. The best way I have found to deal with this is to use borderless
+  windowed mode and
+  [reduce motion](https://support.apple.com/en-gb/guide/mac-help/mchlc03f57a1/mac)
+  in macOS. Then use `cmd + tab` twice quickly to re-lock the mouse.
 
-The mouse sometimes becomes unlocked, requiring you to tab out, then back in to
-fix it. The best way I have found to deal with this is to use borderless
-windowed mode,
-[reduce motion](https://support.apple.com/en-gb/guide/mac-help/mchlc03f57a1/mac)
-in macOS, and cmd + tab twice quickly to re-lock the mouse.
+- On versions of macOS prior to Sonoma, the game has many missing UI elements
+  making menu navigation difficult. This issue is completely resolved in macOS
+  Sonoma.
+
+- I have made a simple application for editing game settings. It is available
+  here: [overwatch-settings](https://github.com/Marqasa/overwatch-settings). You
+  can also modify the settings file manually here:
+  `~/Documents/Overwatch/Settings/Settings_v0.ini`
+
+- To help with menu navigation, I have uploaded a gallery showing how the UI
+  should look here: [UI Gallery](https://imgur.com/a/exzsCBi). There is also a
+  good video for editing settings. Make the game and video full screen then tab
+  between them: [YouTube Video](https://www.youtube.com/watch?v=tgS_OGABrGY)
