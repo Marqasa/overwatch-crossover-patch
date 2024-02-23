@@ -52,22 +52,27 @@ Security > Full Disk Access and adding Terminal to the list.
 
 ## Known Issues
 
-- The mouse sometimes becomes unlocked, requiring you to tab out, then back in
-  to fix it. The best way I have found to deal with this is to use borderless
-  windowed mode and
+- No known issues as of CrossOver 24.0.0 and macOS Sonoma.
+
+- On versions of CrossOver prior to 24.0.0, the mouse sometimes becomes
+  unlocked, requiring you to tab out, then back in to fix it. The best way I
+  have found to deal with this is to use borderless windowed mode and
   [reduce motion](https://support.apple.com/en-gb/guide/mac-help/mchlc03f57a1/mac)
-  in macOS. Then use `cmd + tab` twice quickly to re-lock the mouse.
+  in macOS. Then use `cmd + tab` twice quickly to re-lock the mouse. This issues
+  is completely resolved in CrossOver 24.0.0.
 
 - On versions of macOS prior to Sonoma, the game has many missing UI elements
   making menu navigation difficult. This issue is completely resolved in macOS
   Sonoma.
 
-- I have made a simple application for editing game settings. It is available
-  here: [overwatch-settings](https://github.com/Marqasa/overwatch-settings). You
-  can also modify the settings file manually here:
+- For versions of macOS prior to Sonoma, I have made a simple application for
+  editing game settings. It is available here:
+  [overwatch-settings](https://github.com/Marqasa/overwatch-settings). You can
+  also modify the settings file manually here:
   `~/Documents/Overwatch/Settings/Settings_v0.ini`
 
-- To help with menu navigation, I have uploaded a gallery showing how the UI
-  should look here: [UI Gallery](https://imgur.com/a/exzsCBi). There is also a
-  good video for editing settings. Make the game and video full screen then tab
-  between them: [YouTube Video](https://www.youtube.com/watch?v=tgS_OGABrGY)
+- For versions of macOS prior to Sonoma, I have uploaded a gallery showing how
+  the UI should look here: [UI Gallery](https://imgur.com/a/exzsCBi). There is
+  also a good video for editing settings. Make the game and video full screen
+  then tab between them:
+  [YouTube Video](https://www.youtube.com/watch?v=tgS_OGABrGY)
