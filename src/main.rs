@@ -153,7 +153,7 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
     // Set the dependency file names and URLs
     let moltenvk_file = "MoltenVK-macos.tar";
     let moltenvk_url = format!(
-        "https://github.com/KhronosGroup/MoltenVK/releases/download/v1.2.4/{}",
+        "https://github.com/KhronosGroup/MoltenVK/releases/download/v1.2.7/{}",
         moltenvk_file
     );
     let dxvk_file = "dxvk-macOS-async-v1.10.3-20230402-CrossOver.tar.gz";
