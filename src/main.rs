@@ -20,7 +20,7 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
     let inner_crossover_path = "Contents/SharedSupport/CrossOver";
 
     // Full path to the CrossOver folder
-    let crossover_path = Path::new("/Applications/CrossOver.app").join(inner_crossover_path);
+    let mut crossover_path = Path::new("/Applications/CrossOver.app").join(inner_crossover_path);
 
     // Check if the crossover path exists
     if !crossover_path.exists() {
@@ -39,7 +39,7 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
         crossover_location = crossover_location.trim().to_string();
 
         // Create the crossover path
-        let crossover_path = Path::new(&crossover_location).join(inner_crossover_path);
+        crossover_path = Path::new(&crossover_location).join(inner_crossover_path);
 
         // Check if the crossover path exists
         if !crossover_path.exists() {
